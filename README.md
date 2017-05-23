@@ -12,7 +12,8 @@ The generated apk file can be found at "ProjectName\app\build\outputs\apk"
 To install a minumum android version of sdk 23 - Android 6.0
 This application is tested and targeted at sdk 25
 
-Google drive download link for latest generated apk
+The latest apk file can be found in the APK folder in the project structure or in the
+following Google drive download link
 https://drive.google.com/open?id=0B9AUEF4gERH6emk0WkZuanhwTUE
 
 Simply download or transfer this file to your Android device.
