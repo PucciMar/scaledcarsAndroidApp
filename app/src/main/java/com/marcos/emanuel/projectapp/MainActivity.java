@@ -1,37 +1,3 @@
-package com.marcos.emanuel.projectapp;
-
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.util.Properties;
-
 /**
  * ProjectAp - A simple android application to interface with OpenDaVINCI scaledcars
  * Version: 1.0
@@ -51,6 +17,37 @@ import java.util.Properties;
  * Neither the name of the (AUTHOR/ORGANIZATION) nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written permission.
  */
+
+package com.marcos.emanuel.projectapp;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
+import java.util.Properties;
 
 public class MainActivity extends AppCompatActivity {
     private String command, ip, password, user, output;
@@ -76,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         root.setBackgroundColor(getResources().getColor(android.R.color.background_light));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getSupportActionBar().hide();
-
         stop = (Button) findViewById(R.id.Stop);
         park = (Button) findViewById(R.id.Parker);
         stop.setBackgroundColor(Color.GREEN);
@@ -87,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
         videostream = (Button) findViewById(R.id.Stream);
         videostream.setText("Video Stream");
         shell = (TextView) findViewById(R.id.shell);
-
         userText = (EditText) findViewById(R.id.userText);
         passText = (EditText) findViewById(R.id.passText);
         shell.setMovementMethod(new ScrollingMovementMethod());
@@ -95,9 +90,8 @@ public class MainActivity extends AppCompatActivity {
         image = (ImageView) findViewById(R.id.imageView);
 
     }
-
+    // on click listener
     public void onClick(View v) {
-
         editor = toSend.edit();
         ip = IP.getText().toString().trim();
         password = passText.getText().toString().trim();
@@ -105,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("IP", ip);
 
         switch (v.getId()) {
-            case R.id.Stop:
+            case R.id.Stop: 
                 if (stop_) {
                     stop_ = false;
                     stop.setBackgroundColor(Color.GREEN);
@@ -156,21 +150,21 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
         stopService(v);
     }
-
+    // start udp sender service method, used to send udp packets
     public void startService(View view) {
         startService(new Intent(getBaseContext(), UDPSender.class));
     }
-
+    // stop udp sender service
     public void stopService(View view) {
         stopService(new Intent(getBaseContext(), UDPSender.class));
     }
 
-
+    // start udp receiver thred, used to receive video stream via udp packets
     protected void Start() {
         udpServerThread = new UdpServerThread(1234);
         udpServerThread.start();
     }
-
+    // stop udp receiver
     protected void Stop() {
         if (udpServerThread != null) {
             udpServerThread.setRunning(false);
@@ -178,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             socket.close();
         }
     }
-
+    // method to update the image view with new frames
     private void updateState(final Bitmap img) {
         runOnUiThread(new Runnable() {
             @Override
@@ -187,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    // for debugging purposes, a print is done into the shell edit text to signal stream start
     private void updatePrompt(final String prompt) {
         runOnUiThread(new Runnable() {
             @Override
@@ -196,12 +190,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    // upd receiver class runs on its own thread
     private class UdpServerThread extends Thread {
-
         int serverPort;
-
-
         boolean running;
 
         public UdpServerThread(int serverPort) {
@@ -251,11 +242,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-    }
+    } 
 
-    /**
-     * Async class responsible for ssh
-     */
+    
+     //Async class responsible for ssh functionality
     private class ExecuteRemoteCommand extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -267,7 +257,8 @@ public class MainActivity extends AppCompatActivity {
             pDialog.show();
         }
 
-
+        // doInBackGround method executes the string input into the edit text field by the user
+        // on the targed device, generating a string with the echo resulting from the command
         @Override
         protected String doInBackground(String... params) {
             try {
@@ -310,10 +301,9 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return output;
         }
-
+        // Updates the text field shell with the result string
         @Override
         protected void onPostExecute(String result) {
             if (pDialog.isShowing())
