@@ -1,5 +1,6 @@
 ﻿# Scaledcars Android Application apk generation and instal guide
 =============================================================
+
 To generate an apk file:
 
 In Android Studio:
@@ -17,6 +18,7 @@ https://drive.google.com/open?id=0B9AUEF4gERH6emk0WkZuanhwTUE
 Simply download or transfer this file to your Android device.
 
 =============================================================
+
 Instalation:
 
 As a non-signed application, "Unknow Sources" permission is necessary upon instalation.
