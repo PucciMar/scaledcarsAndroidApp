@@ -1,7 +1,7 @@
 /**
  * ProjectAp - A simple android application to interface with OpenDaVINCI scaledcars
  * Version: 1.0
- * Authos: Emanuel Marcos
+ * Author: Emanuel Marcos
  * <p>
  * License: BSD
  * <p>
